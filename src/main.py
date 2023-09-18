@@ -9,22 +9,20 @@ os.system('cls')
 
 
 
-carDict = {}
+carDict = {} # membuat dictionasry database kosong
 
 def getCardb():
-    global carDict
+    global carDict # mengakses data database
     with open(pathunitdetail, 'r') as file:
         car_reader = csv.reader(file, delimiter=':')
-        for i, val in enumerate(car_reader):
+        for i, val in enumerate(car_reader): #mengiterasi file csv untuk dijadikan dictionary database
             if i == 0:
-                # print(i, val)
                 header = val
-                carDict.update({'key': header})
-                # print(f'{key}: {val}')
+                carDict.update({'key': header}) 
                 continue
             No, Code, Unit_info, transmition, Merk, Color, Year, Plate, Fuel, Owner = val
-            carDict.update({(Code): [int(No), Code, Unit_info, transmition, Merk, Color, Year, Plate, Fuel, Owner]})
-        return carDict
+            carDict.update({(Code): [int(No), Code, Unit_info, transmition, Merk, Color, Year, Plate, Fuel, Owner]}) # menjadikan code sebagai primary key 
+        return carDict #mengmbalikan hasil iterasi ke dalam database dengan format dictionary 
 
 
 prompt = '''
@@ -39,28 +37,30 @@ list Display main
 
 '''
 def clearscreen():
-    # windows
+    #untuk membersihkan layar tampilan
+    # untuk pengguna windows
     if os.name == 'nt':
         os.system('cls')
-    # Mac or Linux
+    # untuk pengguna Mac or Linux
     else:
         os.system('clear')
 
 def main():
-    global carDict
+    global carDict #untuk mengakses database carDict
     while True:
         print(prompt)
         menu = pyi.inputInt(prompt='Silahkan pilih menu: ')
         os.system('cls')
         if menu == 1:
-            rc.show(carDict)
+            rc.show(carDict) # menampilkan menu tampilan data
         elif menu == 2:
-            rc.add(carDict)
+            rc.add(carDict) # menambahkan data baru pada database
         elif menu == 3:
-            rc.update(carDict)
+            rc.update(carDict) # untuk edit data apabila ada perubahan pada data
         elif menu == 4:
-            rc.delete(carDict)
+            rc.delete(carDict) # untuk menghapus data apabila ada data yang tidak diperlukan
         else:
+            # konfirmasi user untuk exit dari program
             confirmexit= pyi.inputYesNo('Do you want to exit from the program ?: ')
             if confirmexit == 'yes':
                 clearscreen()
@@ -69,7 +69,7 @@ def main():
                 clearscreen()
                 continue
             
-
+    # setelah exit data pada database akan diperbaharui 
     with open(pathunitdetail, 'w') as file:
         carDictWritter = csv.writer(file, delimiter=':', lineterminator='\n')
         carDictWritter.writerows(carDict.values())

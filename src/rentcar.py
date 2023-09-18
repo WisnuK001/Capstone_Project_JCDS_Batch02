@@ -5,14 +5,16 @@ import pyinputplus as pyi
 pathunitdetail = "src/1.dictunitdetail.csv"
 
 def clearscreen():
-    # windows
+    #untuk membersihkan layar tampilan
+    # untuk pengguna windows
     if os.name == 'nt':
         os.system('cls')
-    # Mac or Linux
+    # untuk pengguna Mac or Linux
     else:
         os.system('clear')
 
 def show(carDict):
+    #menampilkan menu tampilan
     while True:
         prompt = '''
         
@@ -25,14 +27,14 @@ Data inventory Menu
 3. Back to main menu
 '''
         print(prompt)
-        list = pyi.inputInt('masukkan opsi: ')
+        list = pyi.inputInt('masukkan opsi: ') # user memilih submenu 
         clearscreen()
         if list == 1:
-            showsub(carDict)
+            showsub(carDict) # menampilkan seluruh data seutuhnya
         elif list == 2:
-            showbycode(carDict)
+            showbycode(carDict) # menampilkan data tertentu dengan menggunakan code sebagai primary key
         elif list == 3:
-            confirmmain= pyi.inputYesNo('Back to main menu ?: ')
+            confirmmain= pyi.inputYesNo('Back to main menu ?: ') # konfirmasi user untuk kembali ke menu awal 
             if confirmmain == 'yes':
                 clearscreen()
                 break
@@ -43,32 +45,37 @@ Data inventory Menu
 
 def showsub(carDict):
     while True:
-        if len(carDict) >= 1:
+        if len(carDict) >= 1: # memastikan bahwa tersedia data untuk ditampilkan
             header = carDict['key']
             data = list(carDict.values())[1:]
             print(tabulate(data, header, tablefmt='pretty'))
             break
-        else:
+        else: #  Kondisiila data belum tersedia
             print('Maaf data belum tersedia')
             break
 
 def showbycode(carDict):
+    """function to display specific data with a primary key input by the user 
+
+    Args:
+        carDict (Dictionary): Inventory Database
+    """    
     showsub(carDict)
     while True:
         header = carDict['key']
         data = False
         codevalue = []
-        codeinput = pyi.inputStr("masukkan code : ").upper()
+        codeinput = pyi.inputStr("masukkan code : ").upper() # user memasukan code sebagai primary key
         for key, val in carDict.items():
             if codeinput.upper() == carDict[key][1].upper():
                 codevalue.append(val)
                 data = True
         if not data:
-            print("\n\n\nMaaf data tidak tersedia")
+            print("\n\n\nMaaf data tidak tersedia") # kondisi apabila code yang dimasukkan tidak ada dalam database
         else:
             os.system('cls')
             print(f'\n{codeinput.upper()} data: \n')
-            print(tabulate(codevalue, headers=header, tablefmt="pretty"))
+            print(tabulate(codevalue, headers=header, tablefmt="pretty")) # menampilkan data dengan input dari user
         break
 
 
@@ -102,14 +109,15 @@ def adddata(carDict):
     os.system('cls')
     while True:
         newdata = pyi.inputChoice(
-            prompt='ingin menambahkan data baru ?(y/n): ', choices=['y', 'n'])
-        if newdata == 'y':
+            prompt='ingin menambahkan data baru ?(y/n): ', choices=['y', 'n']) # konfirmasi penambahan data
+        if newdata == 'y': # user menambahkan data
             No = len(carDict)
             code = input("masukkan code unit baru:").upper()
-            if code in carDict:
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
-                print("Maaf code sudah digunakan")
-            else:
+            if code in carDict: # pengecekan code untuk menghindari duplikasi
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n') # menampilkan data pada code yang sudah digunakan
+                print("Maaf code sudah digunakan") 
+            else: # code disetujui karena belum ada dalam database 
+                #user memasukan informasi yang diperlukan
                 Unitinfo = pyi.inputStr("masukkan nama unit baru(co: calya): ").capitalize()
                 transmition = pyi.inputStr("masukkan jenis transmition (at/mt): ").upper()
                 Merk = pyi.inputStr("masukkan nama merk(co: toyota): ").capitalize()
@@ -119,18 +127,16 @@ def adddata(carDict):
                 Fuel = pyi.inputStr("masukkan bahan bakar unit(co: pertalite): ").capitalize()
                 Owner = pyi.inputStr("masukkan nama pemilik(co: Aditya): ").capitalize()
                 saving = pyi.inputStr('Simpan data yang baru ? (y/n): ')
-                if saving == 'y':
+                if saving == 'y': # konfirmasi penyimpanan data
                     clearscreen()
                     carDict.update({f'{code}': [No, code, Unitinfo, transmition, Merk, Color, Year, Plate, Fuel,Owner]})
-                    print('Data sudah berhasil di input')
-                    showsub(carDict)                
-                elif saving == "n":
-                    break
-        # elif:
-        # print('maaf opsi yang anda masukan salah')
+                    print('Data sudah berhasil di input') # data berhasil ditambahkan 
+                    showsub(carDict) # menampilkan data setelah penambahan data berhasil
+                elif saving == "n": # kondisi apabila user tidak memberi penambahan data
+                    break 
         else:
             break
-        return carDict
+        return carDict # mengembalikan perubahan data 
     os.system('cls')
 
 def update(carDict):
@@ -147,11 +153,11 @@ def update(carDict):
         subupdate = pyi.inputInt('masukkan pilihan: ')
         clearscreen()
         if subupdate == 1:
-            updatedata(carDict)
+            updatedata(carDict) # update/edit data secara menyeluruh
         elif subupdate == 2:
-            updatedatabycolumn(carDict)
+            updatedatabycolumn(carDict) #update/edit data berdasarkan kolom tertentu
         elif subupdate == 3:
-            confirmmain= pyi.inputYesNo('Back to main menu ?: ')
+            confirmmain= pyi.inputYesNo('Back to main menu ?: ') # konfirmasi user kembali ke menu utama
             if confirmmain == 'yes':
                 clearscreen()
                 break
@@ -164,16 +170,17 @@ def updatedata(carDict):
     os.system('cls')
     while True:
         os.system('cls')
-        updatingdata = pyi.inputChoice(prompt='ingin mengubah data tertentu ?(y/n): ', choices=['y', 'n'])
+        updatingdata = pyi.inputChoice(prompt='ingin mengubah data tertentu ?(y/n): ', choices=['y', 'n']) # konfirmasi user untuk edit data
         if updatingdata == 'y':
             showsub(carDict)
-            code = pyi.inputStr("masukkan code data yang ingin di update:").upper()
-            if code in carDict:
+            code = pyi.inputStr("masukkan code data yang ingin di update:").upper() # memasukan primary key untuk menentukan data yang akan di edit
+            if code in carDict: # memastikan code yang diinputkan ada dalam databse
                 clearscreen()
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n') # menammpilkan data yang ingin di edit
                 continueupdating = pyi.inputChoice(prompt='Apakah data ini ingin di update ?(y/n): ', choices=['y', 'n'])
                 if continueupdating == 'y':
                     No = carDict[code][0]
+                    #memastikan untuk code akan menggunakan code yang lama atau diganti
                     confirmupdatecode= pyi.inputChoice(prompt='Ganti code atau tetap gunakan code yang sama? (ganti/tetap): ', choices=['ganti', 'tetap']).lower()
                     if confirmupdatecode == 'ganti':
                         codebaru = pyi.inputStr("[Code] Ganti dengan code yang baru:").upper()
@@ -184,21 +191,21 @@ def updatedata(carDict):
                         elif codebaru not in carDict.keys():
                             carDict[code][1] = codebaru
                             print(carDict)
-                    unitinfo    = pyi.inputStr('[Unit info] Silahkan ganti dengan nama yang baru: ',).title() #applyFunc=lambda x: x.capitalize())
+                    unitinfo    = pyi.inputStr('[Unit info] Silahkan ganti dengan nama yang baru: ',).title()
                     carDict[code][2] : unitinfo
-                    Transmition = pyi.inputStr('[Transmition] Silahkan ganti jenis transmition (at/mt): ',).upper()  #applyFunc=lambda x: x.upper())
+                    Transmition = pyi.inputStr('[Transmition] Silahkan ganti jenis transmition (at/mt): ',).upper()
                     carDict[code][3] : Transmition
-                    Merk        = pyi.inputStr('[Merk] Silahkan masukkan Merk unit: ',).title()  #applyFunc=lambda x: x.title())
+                    Merk        = pyi.inputStr('[Merk] Silahkan masukkan Merk unit: ',).title()
                     carDict[code][4] : Merk
-                    Color       = pyi.inputStr('[Color] Silahkan masukkan warna terbaru: ',).title()  #applyFunc=lambda x: x.title())
+                    Color       = pyi.inputStr('[Color] Silahkan masukkan warna terbaru: ',).title()
                     carDict[code][5] : Color
-                    Year        = pyi.inputInt('[Year] Silahkan masukkan tahun produksi: ',)  #applyFunc=lambda x: x)
+                    Year        = pyi.inputInt('[Year] Silahkan masukkan tahun produksi: ',) 
                     carDict[code][6] : Year
-                    Plate       = pyi.inputStr('[Plate] Silahkan ganti dengan plat nomor yang sesuai: ',).upper()  #applyFunc=lambda x: x.upper())
+                    Plate       = pyi.inputStr('[Plate] Silahkan ganti dengan plat nomor yang sesuai: ',).upper()
                     carDict[code][7] : Plate
-                    Fuel        = pyi.inputStr('[Fuel] Silahkan masukan jenis bahan bakar: ',).title()  #applyFunc=lambda x: x.title())
+                    Fuel        = pyi.inputStr('[Fuel] Silahkan masukan jenis bahan bakar: ',).title()
                     carDict[code][8] : Fuel
-                    Owner       = pyi.inputStr('[Owner] Silahkan masukkan nama pemilik yang baru: ',).title()  #applyFunc=lambda x: x.title())
+                    Owner       = pyi.inputStr('[Owner] Silahkan masukkan nama pemilik yang baru: ',).title()
                     carDict[code][9] : Owner
                     confirmupdate = pyi.inputYesNo(prompt='Apakah data ini ingin di update ?(y/n): ')
                     if confirmupdate == 'yes':
@@ -402,9 +409,9 @@ def delete(carDict):
         subdelete = pyi.inputInt('masukkan pilihan: ')
         clearscreen()
         if subdelete == 1:
-            deletedata(carDict)
+            deletedata(carDict) # penghapusan data dari database
         elif subdelete == 2:
-            confirmmenu= pyi.inputYesNo('Back to main menu ?: ')
+            confirmmenu= pyi.inputYesNo('Back to main menu ?: ') # konfirmasi user kembali ke menu utama
             if confirmmenu == 'yes':
                 clearscreen()
                 break

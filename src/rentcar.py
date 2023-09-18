@@ -107,7 +107,7 @@ def adddata(carDict):
             No = len(carDict)
             code = input("masukkan code unit baru:").upper()
             if code in carDict:
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                 print("Maaf code sudah digunakan")
             else:
                 Unitinfo = pyi.inputStr("masukkan nama unit baru(co: calya): ").capitalize()
@@ -170,38 +170,41 @@ def updatedata(carDict):
             code = pyi.inputStr("masukkan code data yang ingin di update:").upper()
             if code in carDict:
                 clearscreen()
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                 continueupdating = pyi.inputChoice(prompt='Apakah data ini ingin di update ?(y/n): ', choices=['y', 'n'])
                 if continueupdating == 'y':
                     No = carDict[code][0]
-                    codebaru = pyi.inputStr("Ganti dengan code yang baru:").upper()
-                    if  codebaru in carDict.keys():
-                        clearscreen()
-                        print('Maaf Code sudah digunakkan')
-                        break
-                    elif codebaru not in carDict.keys():
-                        carDict[code][1] = codebaru
-                    unitinfo    = pyi.inputStr('Silahkan ganti dengan nama yang baru: ',).title() #applyFunc=lambda x: x.capitalize())
+                    confirmupdatecode= pyi.inputChoice(prompt='Ganti code atau tetap gunakan code yang sama? (ganti/tetap): ', choices=['ganti', 'tetap']).lower()
+                    if confirmupdatecode == 'ganti':
+                        codebaru = pyi.inputStr("[Code] Ganti dengan code yang baru:").upper()
+                        if  codebaru in carDict.keys():
+                            clearscreen()
+                            print('Maaf Code sudah digunakkan')
+                            break
+                        elif codebaru not in carDict.keys():
+                            carDict[code][1] = codebaru
+                            print(carDict)
+                    unitinfo    = pyi.inputStr('[Unit info] Silahkan ganti dengan nama yang baru: ',).title() #applyFunc=lambda x: x.capitalize())
                     carDict[code][2] : unitinfo
-                    Transmition = pyi.inputStr('Silahkan ganti jenis transmition (at/mt): ',).upper()  #applyFunc=lambda x: x.upper())
+                    Transmition = pyi.inputStr('[Transmition] Silahkan ganti jenis transmition (at/mt): ',).upper()  #applyFunc=lambda x: x.upper())
                     carDict[code][3] : Transmition
-                    Merk        = pyi.inputStr('Silahkan masukkan Merk unit: ',).title()  #applyFunc=lambda x: x.title())
+                    Merk        = pyi.inputStr('[Merk] Silahkan masukkan Merk unit: ',).title()  #applyFunc=lambda x: x.title())
                     carDict[code][4] : Merk
-                    Color       = pyi.inputStr('Silahkan masukkan warna terbaru: ',).title()  #applyFunc=lambda x: x.title())
+                    Color       = pyi.inputStr('[Color] Silahkan masukkan warna terbaru: ',).title()  #applyFunc=lambda x: x.title())
                     carDict[code][5] : Color
-                    Year        = pyi.inputInt('Silahkan masukkan tahun produksi: ',)  #applyFunc=lambda x: x)
+                    Year        = pyi.inputInt('[Year] Silahkan masukkan tahun produksi: ',)  #applyFunc=lambda x: x)
                     carDict[code][6] : Year
-                    Plate       = pyi.inputStr('Silahkan ganti dengan plat nomor yang sesuai: ',).upper()  #applyFunc=lambda x: x.upper())
+                    Plate       = pyi.inputStr('[Plate] Silahkan ganti dengan plat nomor yang sesuai: ',).upper()  #applyFunc=lambda x: x.upper())
                     carDict[code][7] : Plate
-                    Fuel        = pyi.inputStr('Silahkan masukan jenis bahan bakar: ',).title()  #applyFunc=lambda x: x.title())
+                    Fuel        = pyi.inputStr('[Fuel] Silahkan masukan jenis bahan bakar: ',).title()  #applyFunc=lambda x: x.title())
                     carDict[code][8] : Fuel
-                    Owner       = pyi.inputStr('Silahkan masukkan nama pemilik yang baru: ',).title()  #applyFunc=lambda x: x.title())
+                    Owner       = pyi.inputStr('[Owner] Silahkan masukkan nama pemilik yang baru: ',).title()  #applyFunc=lambda x: x.title())
                     carDict[code][9] : Owner
                     confirmupdate = pyi.inputYesNo(prompt='Apakah data ini ingin di update ?(y/n): ')
                     if confirmupdate == 'yes':
                         carDict[code]= [No, codebaru, unitinfo, Transmition, Merk, Color, Year, Plate, Fuel,Owner]
                         clearscreen()
-                        print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                        print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                         print('Data sudah berhasil di update')
                         return carDict
                     else:
@@ -228,7 +231,7 @@ def updatedatabycolumn(carDict):
             code = pyi.inputStr("masukkan code data yang ingin di update:").upper()
             if code in carDict:
                 clearscreen()
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                 continueupdating = pyi.inputChoice(prompt='Apakah data ini ingin di update ?(y/n): ', choices=['y', 'n'])
                 if continueupdating == 'y':
                     pilihdata= pyi.inputChoice(
@@ -244,7 +247,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][1] = code1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -259,7 +262,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][2] = nama1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -274,7 +277,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][3] = transmition1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -289,7 +292,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][4] = Merk1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -304,7 +307,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][5] = Color1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -319,7 +322,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][6] = Year1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -334,7 +337,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][7] = Plate1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -349,7 +352,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][8] = Fuel1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -364,7 +367,7 @@ def updatedatabycolumn(carDict):
                             if confirmupdat == 'y':
                                 carDict[code][9] = Owner1
                                 clearscreen()
-                                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                                 print('Data sudah berhasil di update')
                             else:
                                 clearscreen()
@@ -417,7 +420,7 @@ def deletedata(carDict):
             code = pyi.inputStr("masukkan code data yang ingin di hapus:").upper()
             clearscreen()
             if code in carDict:
-                print(tabulate([carDict[code]], carDict['key'], tablefmt='outline'), '\n\n')
+                print(tabulate([carDict[code]], carDict['key'], tablefmt='pretty'), '\n\n')
                 for i in carDict.values():
                     if i[0]== 'No':
                         continue
@@ -428,12 +431,18 @@ def deletedata(carDict):
                     del carDict[code]
                     showsub(carDict)
                     print('Data sudah berhasil dihapus')
+
                     break
                 else:
                     clearscreen()
+                    for i, val in enumerate(carDict.values()):
+                        if val[0] == 'No':
+                            continue
+                        val[0] = i
                     break
             else:
                 print('Maaf code yang anda masukan tidak tersedia')
                 break
         else:
+            clearscreen()
             break
